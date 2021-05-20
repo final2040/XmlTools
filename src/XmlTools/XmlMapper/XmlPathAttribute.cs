@@ -3,6 +3,19 @@ using System.Xml;
 
 namespace XmlTools.XmlMapper
 {
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class XmlMapperNamespaceAttribute : Attribute
+    {
+        public string Name { get; }
+        public string Uri { get; }
+
+        public XmlMapperNamespaceAttribute(string name, string uri)
+        {
+            Name = name;
+            Uri = uri;
+        }
+    }
+
     [AttributeUsage(AttributeTargets.Property)]
     public class XmlPathAttribute : Attribute
     {

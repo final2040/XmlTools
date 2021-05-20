@@ -1,0 +1,12 @@
+﻿<p:example xmlns:p = "http://exampleNamespace.com/" xmlns:i = "http://exampleNamespace2">
+  <p:file>
+    <firstName>Jorge</firstName>
+    <lastName>Gomez</lastName>
+    <age>25</age>
+    <i:adrress>
+      <street>Nort 11</street>
+      <number>15</number>
+      <city>Los alamos</city>
+    </i:adrress>
+  </p:file>
+</p:example>

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<example>
+  <school>Abraham Lincoln</school>
+  <schoolNumber>32</schoolNumber>
+  <schoolState>Alabama</schoolState>
+  <inscriptionDate>2021-05-20</inscriptionDate>
+  <alumn>
+    <firstName>Juan</firstName>
+    <lastName>Perez</lastName>
+    <age>19</age>
+    <address>
+      <street>1st Street</street>
+      <number>25A</number>
+      <phone>
+        <number>555-45258</number>
+        <countryCode>01</countryCode>
+      </phone>
+    </address>
+  </alumn>
+  <parent>
+    <firstName>Rosa</firstName>
+    <lastName>Perez</lastName>
+    <age>43</age>
+    <address>
+      <street>2nd Street</street>
+      <number>45</number>
+      <phone>
+        <number>555-458780</number>
+        <countryCode>01</countryCode>
+      </phone>
+    </address>
+  </parent>
+</example>

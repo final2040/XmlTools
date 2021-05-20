@@ -17,6 +17,24 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="XmlMapper\Samples\InvalidXml.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="XmlMapper\Samples\EmptyNode.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="XmlMapper\Samples\OptionalEmptyNode.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="XmlMapper\Samples\MissingNode.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="XmlMapper\Samples\xmlWithNamespaces.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="XmlMapper\Samples\ValidXml.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="XmlValidator\XML\InvalidTestXml.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

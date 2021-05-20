@@ -1,4 +1,5 @@
 using System;
+using System.Net.Sockets;
 using System.Xml;
 using NUnit.Framework;
 using XmlTools.XmlMapper;
@@ -7,85 +8,12 @@ namespace UnitTests.XmlMapper
 {
     public class XmlMapperTests
     {
-        private Destination _source;
-
-        public const string Xml =
-            @"
-                <file>
-	                <firstName>Gabriel</firstName>
-	                <lastName>Molina</lastName>
-	                <address>Alfredo Vargas #36</address>
-                    <age>22</age>
-                    <city>Mexico</city>
-                    <country></country>
-                    <state>Mexico</state>
-                    <number>1</number>
-                    <dateOfBirth>24-09-2002</dateOfBirth>
-                    <nested>
-                        <age>12</age>
-                        <lastName>Ferrer</lastName>
-                    </nested>
-                </file>";
-
-        public const string BadXml =
-            @"
-                <file>
-	                <firstName>Gabriel</firstName>
-	                <lastName>Molina</lastName>
-	                <address>Alfredo Vargas #36</address>
-                    <age>22asd</age>
-                    <city></city>
-                    <country></country>
-                    <number>1</number>
-                    <dateOfBirth>24-09-2002</dateOfBirth>
-                    <nested>
-                        <age>12</age>
-                        <lastName>Ferrer</lastName>
-                    </nested>
-                </file>";
-
-        public const string BadXml1 =
-            @"
-                <file>
-	                <firstName>Gabriel</firstName>
-	                <lastName>Molina</lastName>
-	                <address>Alfredo Vargas #36</address>
-                    <age>22</age>
-                    <city>mexico</city>
-                    <country></country>
-                    <number>1</number>
-                    <dateOfBirth>24-09-2002</dateOfBirth>
-                    <nested>
-                        <age>12</age>
-                        <lastName>Ferrer</lastName>
-                    </nested>
-                </file>";
+        
 
         [SetUp]
         public void Setup()
         {
-            _source = new Destination()
-            {
-                Age = 12,
-                BirthDay = new DateTime(1989, 05, 12),
-                City = "Kansas city",
-                Country = "United States",
-                Name = "Richard",
-                NestedObject = new Nested()
-                {
-                    Number = 43,
-                    NestedObject = new Nested2()
-                    {
-                        LastName = "Mendez"
-                    }
-                },
-                State = "Kansas",
-                Nested2 = new Nested3()
-                {
-                    Age = 34,
-                    LastName = "Lavariega"
-                }
-            };
+            
         }
 
         [Test]
@@ -96,10 +24,31 @@ namespace UnitTests.XmlMapper
           
 
             // act
-            var result = mapper.Map<Destination>(Xml);
+            var result = mapper.Map<Example>(XmlSample.ValidXml);
 
             // assert
-            Assert.That(result.Name, Is.EqualTo("Gabriel"));
+            Assert.That(result.SchoolName, Is.EqualTo("Abraham Lincoln"));
+            Assert.That(result.SchoolState, Is.EqualTo("Alabama"));
+            Assert.That(result.SchoolNumber, Is.EqualTo(32));
+        }
+
+        [Test]
+        public void Map_ShouldMapNodesWithNamespaceToProperties()
+        {
+            // arrange
+            var mapper = new Mapper();
+
+
+            // act
+            var result = mapper.Map<NamespacesExample>(XmlSample.XmlWithNamespaces);
+
+            // assert
+            Assert.That(result.Age, Is.EqualTo(25));
+            Assert.That(result.City, Is.EqualTo("Los alamos"));
+            Assert.That(result.FirstName, Is.EqualTo("Jorge"));
+            Assert.That(result.LastName, Is.EqualTo("Gomez"));
+            Assert.That(result.Number, Is.EqualTo("15"));
+            Assert.That(result.Street, Is.EqualTo("Nort 11"));
         }
 
         [Test]
@@ -110,10 +59,10 @@ namespace UnitTests.XmlMapper
 
 
             // act
-            var result = mapper.Map<Destination>(Xml);
+            var result = mapper.Map<Example>(XmlSample.ValidXml);
 
             // assert
-            Assert.That(result.Age, Is.EqualTo(22));
+            Assert.That(result.SchoolNumber, Is.EqualTo(32));
         }
 
         [Test]
@@ -124,10 +73,10 @@ namespace UnitTests.XmlMapper
 
 
             // act
-            var actual = Assert.Throws<XmlMappingInvalidFormatException>(() => mapper.Map<Destination>(BadXml));
+            var actual = Assert.Throws<XmlMappingInvalidFormatException>(() => mapper.Map<Example>(XmlSample.InvalidXml));
 
             // assert
-            Assert.That(actual.NodePath, Is.EqualTo("/file/age"));
+            Assert.That(actual.NodePath, Is.EqualTo("/example/schoolNumber"));
         }
 
         [Test]
@@ -138,10 +87,10 @@ namespace UnitTests.XmlMapper
 
 
             // act
-            var actual = Assert.Throws<XmlMappingInvalidFormatException>(() => mapper.Map<Destination>(BadXml));
+            var actual = Assert.Throws<XmlMappingRequiredException>(() => mapper.Map<Example>(XmlSample.EmptyNodeXml));
 
             // assert
-            Assert.That(actual.NodePath, Is.EqualTo("/file/age"));
+            Assert.That(actual.NodePath, Is.EqualTo("/example/school"));
         }
 
         [Test]
@@ -152,10 +101,10 @@ namespace UnitTests.XmlMapper
 
 
             // act
-            var result = mapper.Map<Destination>(Xml);
+            var result = mapper.Map<Example>(XmlSample.EmptyNodeNotRequiredXml);
 
             // assert
-            Assert.That(result.Country, Is.Empty);
+            Assert.That(result.SchoolState, Is.Empty);
         }
 
 
@@ -167,10 +116,10 @@ namespace UnitTests.XmlMapper
 
 
             // act
-            var actual = Assert.Throws<XmlMappingNodeNotFoundException>(() => mapper.Map<Destination>(BadXml1));
+            var actual = Assert.Throws<XmlMappingNodeNotFoundException>(() => mapper.Map<Example>(XmlSample.MissingNodeXml));
 
             // assert
-            Assert.That(actual.NodePath, Is.EqualTo("/file/state"));
+            Assert.That(actual.NodePath, Is.EqualTo("/example/schoolNumber"));
         }
 
         [Test]
@@ -181,10 +130,15 @@ namespace UnitTests.XmlMapper
 
 
             // act
-            var actual = mapper.Map<Destination>(Xml);
+            var actual = mapper.Map<Example>(XmlSample.ValidXml);
 
             // assert
-            Assert.That(actual.NestedObject.Number, Is.EqualTo(1));
+            Assert.That(actual.Alumn.FirstName, Is.EqualTo("Juan"));
+            Assert.That(actual.Alumn.LastName, Is.EqualTo("Perez"));
+            Assert.That(actual.Alumn.Age, Is.EqualTo(19));
+            Assert.That(actual.Parent.FirstName, Is.EqualTo("Rosa"));
+            Assert.That(actual.Parent.LastName, Is.EqualTo("Perez"));
+            Assert.That(actual.Parent.Age, Is.EqualTo(43));
         }
 
         [Test]
@@ -195,10 +149,17 @@ namespace UnitTests.XmlMapper
 
 
             // act
-            var actual = mapper.Map<Destination>(Xml);
+            var actual = mapper.Map<Example>(XmlSample.ValidXml);
 
             // assert
-            Assert.That(actual.NestedObject.NestedObject.LastName, Is.EqualTo("Molina"));
+            Assert.That(actual.Alumn.Address.Street, Is.EqualTo("1st Street"));
+            Assert.That(actual.Alumn.Address.Number, Is.EqualTo("25A"));
+            Assert.That(actual.Alumn.Address.Phone.Code, Is.EqualTo("01"));
+            Assert.That(actual.Alumn.Address.Phone.Number, Is.EqualTo("555-45258"));
+            Assert.That(actual.Parent.Address.Street, Is.EqualTo("2nd Street"));
+            Assert.That(actual.Parent.Address.Number, Is.EqualTo("45"));
+            Assert.That(actual.Parent.Address.Phone.Code, Is.EqualTo("01"));
+            Assert.That(actual.Parent.Address.Phone.Number, Is.EqualTo("555-458780"));
         }
 
         [Test]
@@ -209,10 +170,10 @@ namespace UnitTests.XmlMapper
 
 
             // act
-            var actual = mapper.Map<Destination>(Xml);
+            var actual = mapper.Map<Example>(XmlSample.ValidXml);
 
             // assert
-            Assert.That(actual.BirthDay, Is.EqualTo(new DateTime(2002,09,24)));
+            Assert.That(actual.InscriptionDate, Is.EqualTo(new DateTime(2021,05,20)));
         }
 
         [Test]
@@ -220,17 +181,15 @@ namespace UnitTests.XmlMapper
         {
             // arrange
             var mapper = new Mapper();
-            
+            var sample = Example.CreateSample();
 
             // act
-            var actual = mapper.Map(_source, Xml);
+            var actual = mapper.Map(sample, XmlSample.ValidXml);
 
             // assert
-            Assert.That(GetNodeValue(actual, "/file/firstName"), Is.EqualTo(_source.Name));
-            Assert.That(GetNodeValue(actual, "/file/age"), Is.EqualTo(_source.Age.ToString()));
-            Assert.That(GetNodeValue(actual, "/file/city"), Is.EqualTo(_source.City));
-            Assert.That(GetNodeValue(actual, "/file/country"), Is.EqualTo(_source.Country));
-            Assert.That(GetNodeValue(actual, "/file/state"), Is.EqualTo(_source.State));
+            Assert.That(GetNodeValue(actual, "/example/school"), Is.EqualTo(sample.SchoolName));
+            Assert.That(GetNodeValue(actual, "/example/schoolNumber"), Is.EqualTo(sample.SchoolNumber.ToString()));
+            Assert.That(GetNodeValue(actual, "/example/schoolState"), Is.EqualTo(sample.SchoolState));
         }
 
         [Test]
@@ -239,73 +198,57 @@ namespace UnitTests.XmlMapper
             // arrange
             var mapper = new Mapper();
 
+            var sample = Example.CreateSample();
 
             // act
-            var actual = mapper.Map(_source, Xml);
+            var actual = mapper.Map(sample, XmlSample.ValidXml);
 
             // assert
-            Assert.That(GetNodeValue(actual, "/file/number"), Is.EqualTo(_source.NestedObject.Number.ToString()));
-            Assert.That(GetNodeValue(actual, "/file/lastName"), Is.EqualTo(_source.NestedObject.NestedObject.LastName));
-            Assert.That(GetNodeValue(actual, "/file/nested/age"), Is.EqualTo(_source.Nested2.Age.ToString()));
-            Assert.That(GetNodeValue(actual, "/file/nested/lastName"), Is.EqualTo(_source.Nested2.LastName));
+            Assert.That(GetNodeValue(actual, "/example/alumn/firstName"), Is.EqualTo(sample.Alumn.FirstName));
+            Assert.That(GetNodeValue(actual, "/example/alumn/lastName"), Is.EqualTo(sample.Alumn.LastName));
+            Assert.That(GetNodeValue(actual, "/example/alumn/age"), Is.EqualTo(sample.Alumn.Age.ToString()));
+            Assert.That(GetNodeValue(actual, "/example/alumn/address/street"), Is.EqualTo(sample.Alumn.Address.Street));
+            Assert.That(GetNodeValue(actual, "/example/alumn/address/number"), Is.EqualTo(sample.Alumn.Address.Number));
+            Assert.That(GetNodeValue(actual, "/example/alumn/address/phone/number"), Is.EqualTo(sample.Alumn.Address.Phone.Number));
+            Assert.That(GetNodeValue(actual, "/example/alumn/address/phone/countryCode"), Is.EqualTo(sample.Alumn.Address.Phone.Code));
+            Assert.That(GetNodeValue(actual, "/example/parent/firstName"), Is.EqualTo(sample.Parent.FirstName));
+            Assert.That(GetNodeValue(actual, "/example/parent/lastName"), Is.EqualTo(sample.Parent.LastName));
+            Assert.That(GetNodeValue(actual, "/example/parent/age"), Is.EqualTo(sample.Parent.Age.ToString()));
+            Assert.That(GetNodeValue(actual, "/example/parent/address/street"), Is.EqualTo(sample.Parent.Address.Street));
+            Assert.That(GetNodeValue(actual, "/example/parent/address/number"), Is.EqualTo(sample.Parent.Address.Number));
+            Assert.That(GetNodeValue(actual, "/example/parent/address/phone/number"), Is.EqualTo(sample.Parent.Address.Phone.Number));
+            Assert.That(GetNodeValue(actual, "/example/parent/address/phone/countryCode"), Is.EqualTo(sample.Parent.Address.Phone.Code));
+        }
 
+        [Test]
+        public void Map_ShouldPropertiesWithNamespaceToXml()
+        {
+            // arrange
+            var mapper = new Mapper();
+            var expected = NamespacesExample.CreateSample();
+
+
+            // act
+            var actual = mapper.Map(expected, XmlSample.XmlWithNamespaces);
+
+            // assert
+            Assert.That(GetNodeValue(actual, "/p:example/p:file/firstName"), Is.EqualTo(expected.FirstName));
+            Assert.That(GetNodeValue(actual, "/p:example/p:file/lastName"), Is.EqualTo(expected.LastName));
+            Assert.That(GetNodeValue(actual, "/p:example/p:file/age"), Is.EqualTo(expected.Age.ToString()));
+            Assert.That(GetNodeValue(actual, "/p:example/p:file/i:adrress/street"), Is.EqualTo(expected.Street));
+            Assert.That(GetNodeValue(actual, "/p:example/p:file/i:adrress/number"), Is.EqualTo(expected.Number));
+            Assert.That(GetNodeValue(actual, "/p:example/p:file/i:adrress/city"), Is.EqualTo(expected.City));
         }
 
         public string GetNodeValue(string xml, string xPath)
         {
             var document = new XmlDocument();
+            var nsManager = new XmlNamespaceManager(document.NameTable);
+            nsManager.AddNamespace("p", "http://exampleNamespace.com/");
+            nsManager.AddNamespace("i", "http://exampleNamespace2");
+
             document.LoadXml(xml);
-            return document.SelectSingleNode(xPath)?.InnerText;
+            return document.SelectSingleNode(xPath, nsManager)?.InnerText;
         }
-    }
-
-    class Destination
-    {
-        [XmlPath("/file/firstName")]
-        public string Name { get; set; }
-
-        [XmlPath("/file/age")]
-        public int Age { get; set; }
-
-        [XmlPath("/file/city", Required = true)]
-        public string City { get; set; }
-
-        [XmlPath("/file/country")]
-        public string Country { get; set; }
-
-        
-        [XmlPath("/file/state")]
-        public string State { get; set; }
-        [XmlPath("/file/dateOfBirth")]
-        public DateTime BirthDay { get; set; }
-
-        public string NotMapped { get; set; }
-        [XmlPath()]
-        public Nested NestedObject { get; set; }
-
-        [XmlPath("/file/nested")]
-        public Nested3 Nested2 { get; set; }
-    }
-    
-    public class Nested
-    {
-        [XmlPath("/file/number")]
-        public int Number { get; set; }
-        [XmlPath()]
-        public Nested2 NestedObject { get; set; }
-    }
-
-    public class Nested2
-    {
-        [XmlPath("/file/lastName")]
-        public string LastName { get; set; }
-    }
-    public class Nested3
-    {
-        [XmlPath("/lastName")]
-        public string LastName { get; set; }
-
-        [XmlPath("/age")]
-        public int Age { get; set; }
     }
 }
