@@ -2,9 +2,8 @@
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
-using XmlTools.XmlValidator;
 
-namespace XmlValidator
+namespace XmlTools.XmlValidator
 {
     public class XmlValidator
     {

@@ -27,7 +27,7 @@ namespace UnitTests.XmlValidator
         {
             // arrange
             
-            var xmlValidator = new global::XmlValidator.XmlValidator(_testXmlSchemaUri);
+            var xmlValidator = new global::XmlTools.XmlValidator.XmlValidator(_testXmlSchemaUri);
 
             // act
             var actual = xmlValidator.Validate(_validTestXmlUri);
@@ -40,7 +40,7 @@ namespace UnitTests.XmlValidator
         public void Validate_ShouldReturnInValidResultIfXmlIsInvalid()
         {
             // arrange
-            var xmlValidator = new global::XmlValidator.XmlValidator(_testXmlSchemaUri);
+            var xmlValidator = new global::XmlTools.XmlValidator.XmlValidator(_testXmlSchemaUri);
 
             // act
             var actual = xmlValidator.Validate(_invalidTestXmlUri);
@@ -53,7 +53,7 @@ namespace UnitTests.XmlValidator
         public void Validate_ShouldReturnAddValidationErrorsToValidationResult()
         {
             // arrange
-            var xmlValidator = new global::XmlValidator.XmlValidator(_testXmlSchemaUri);
+            var xmlValidator = new global::XmlTools.XmlValidator.XmlValidator(_testXmlSchemaUri);
 
             // act
             var actual = xmlValidator.Validate(_invalidTestXmlUri);
@@ -67,7 +67,7 @@ namespace UnitTests.XmlValidator
         {
             // arrange
 
-            var xmlValidator = new global::XmlValidator.XmlValidator(_testXmlSchemaUri);
+            var xmlValidator = new global::XmlTools.XmlValidator.XmlValidator(_testXmlSchemaUri);
             var xmlText = File.ReadAllText(_validTestXmlUri.LocalPath);
 
             // act
@@ -81,7 +81,7 @@ namespace UnitTests.XmlValidator
         public void ValidateString_ShouldReturnInValidResultIfXmlIsInvalid()
         {
             // arrange
-            var xmlValidator = new global::XmlValidator.XmlValidator(_testXmlSchemaUri);
+            var xmlValidator = new global::XmlTools.XmlValidator.XmlValidator(_testXmlSchemaUri);
             var xmlText = File.ReadAllText(_invalidTestXmlUri.LocalPath);
 
             // act
@@ -95,7 +95,7 @@ namespace UnitTests.XmlValidator
         public void ValidateString_ShouldReturnAddValidationErrorsToValidationResult()
         {
             // arrange
-            var xmlValidator = new global::XmlValidator.XmlValidator(_testXmlSchemaUri);
+            var xmlValidator = new global::XmlTools.XmlValidator.XmlValidator(_testXmlSchemaUri);
             var xmlText = File.ReadAllText(_invalidTestXmlUri.LocalPath);
 
             // act
