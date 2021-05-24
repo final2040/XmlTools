@@ -23,9 +23,9 @@ namespace XmlTools.XmlMapper
         public string Xpath => _xpath.TrimEnd('/');
         public bool Required { get; set; } = false;
 
-        public XmlPathAttribute():this("/")
+        public XmlPathAttribute() : this("/")
         {
-            
+
         }
 
         public XmlPathAttribute(string xpath)

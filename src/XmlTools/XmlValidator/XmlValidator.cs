@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -10,16 +11,20 @@ namespace XmlTools.XmlValidator
         private readonly XmlSchemaSet _schemaSet = new XmlSchemaSet();
         private XmlValidationResult _result;
 
-        public XmlValidator(Uri schemaUri)
+        public XmlValidator(Uri schemaUri) : this(schemaUri, String.Empty)
         {
-            _schemaSet.Add("", schemaUri.LocalPath);
+
+        }
+        public XmlValidator(Uri schemaUri, string targetNamespace)
+        {
+            _schemaSet.Add(targetNamespace, schemaUri.LocalPath);
         }
 
         public XmlValidationResult Validate(string xml)
         {
             InitResult();
-            var document = XDocument.Parse(xml);
-            document.Validate(_schemaSet, ValidationEventHandler);
+            var reader = XmlReader.Create(new StringReader(xml));
+            Validate(reader);
             return _result;
         }
 
@@ -27,10 +32,15 @@ namespace XmlTools.XmlValidator
         {
             InitResult();
             var reader = XmlReader.Create(uri.LocalPath);
-            var document = XDocument.Load(reader);
-            document.Validate(_schemaSet, ValidationEventHandler);
+            Validate(reader);
 
             return _result;
+        }
+
+        private void Validate(XmlReader reader)
+        {
+            var document = XDocument.Load(reader);
+            document.Validate(_schemaSet, ValidationEventHandler);
         }
 
         private void InitResult()
@@ -40,7 +50,7 @@ namespace XmlTools.XmlValidator
 
         private void ValidationEventHandler(object sender, ValidationEventArgs e)
         {
-            if (e.Severity == XmlSeverityType.Error) _result.AddError(e.Message); 
+            if (e.Severity == XmlSeverityType.Error) _result.AddError(e.Message);
         }
     }
 }

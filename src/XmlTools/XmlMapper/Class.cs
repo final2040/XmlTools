@@ -12,6 +12,11 @@ namespace XmlTools.XmlMapper
 
         private object _context;
 
+        public Class(object context, string parentNode, Dictionary<string, string> namespaces) : this(context, parentNode)
+        {
+            _namespaces = namespaces;
+        }
+
         public Class(object context, string parentNode)
         {
             _context = context;
@@ -72,7 +77,7 @@ namespace XmlTools.XmlMapper
             {
                 if (property.IsUserClass && !property.IsNull)
                 {
-                    destinationXml = new Class(property.GetValue(), _parentNode + property.XmlPath).WriteXml(destinationXml);
+                    destinationXml = new Class(property.GetValue(), _parentNode + property.XmlPath, _namespaces).WriteXml(destinationXml);
                 }
                 else if (!property.IsNull)
                 {

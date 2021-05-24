@@ -1,6 +1,6 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.IO;
-using NUnit.Framework;
 
 namespace UnitTests.XmlValidator
 {
@@ -21,12 +21,12 @@ namespace UnitTests.XmlValidator
             _testXmlSchemaUri = new Uri(_applicationPath + "\\XmlValidator\\xml\\TestXml.xsd");
         }
 
-        
+
         [Test()]
         public void Validate_ShouldReturnValidResultIfXmlIsValid()
         {
             // arrange
-            
+
             var xmlValidator = new global::XmlTools.XmlValidator.XmlValidator(_testXmlSchemaUri);
 
             // act
@@ -61,7 +61,7 @@ namespace UnitTests.XmlValidator
             // assert
             Assert.That(actual.ValidationErrors.Count, Is.EqualTo(2));
         }
-        
+
         [Test()]
         public void ValidateString_ShouldReturnValidResultIfXmlIsValid()
         {

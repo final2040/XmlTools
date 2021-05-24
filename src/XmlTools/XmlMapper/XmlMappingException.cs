@@ -11,7 +11,7 @@ namespace XmlTools.XmlMapper
             NodePath = nodePath;
         }
 
-        public XmlMappingException(string nodePath, string message):base(message)
+        public XmlMappingException(string nodePath, string message) : base(message)
         {
             NodePath = nodePath;
         }
@@ -21,7 +21,7 @@ namespace XmlTools.XmlMapper
             NodePath = nodePath;
         }
 
-        public XmlMappingException(string nodePath, string message, Exception innerException): base(message, innerException)
+        public XmlMappingException(string nodePath, string message, Exception innerException) : base(message, innerException)
         {
             NodePath = nodePath;
         }

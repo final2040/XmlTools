@@ -1,6 +1,6 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Linq;
-using NUnit.Framework;
 using XmlTools.XmlValidator;
 
 namespace UnitTests.XmlValidator
@@ -16,7 +16,7 @@ namespace UnitTests.XmlValidator
 
             // act
             var actual = validationResult.IsValid;
-            
+
             // assert
             Assert.That(actual, Is.True);
         }
@@ -26,7 +26,7 @@ namespace UnitTests.XmlValidator
         {
             // arrange
             var validationResult = new XmlValidationResult();
-            
+
 
             // act
             validationResult.ValidationErrors.Add("Test Error");

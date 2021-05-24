@@ -24,7 +24,7 @@ namespace XmlTools.XmlMapper
         {
             _parentNode = parentNode;
         }
-        
+
         public Property(PropertyInfo property, object context, string parentNode, Dictionary<string, string> namespaces) : this(property, context, parentNode)
         {
             Debug.Assert(property != null);
@@ -97,7 +97,7 @@ namespace XmlTools.XmlMapper
 
             var node = document.SelectSingleNode(_parentNode + _xmlPath.Xpath, xmlnsManager);
 
-            if (node == null)
+            if (node == null && _xmlPath.Required)
             {
                 throw new XmlMappingNodeNotFoundException(_parentNode + _xmlPath.Xpath);
             }

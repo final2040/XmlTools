@@ -6,8 +6,8 @@ namespace UnitTests.XmlMapper
     [XmlMapperNamespace("i", "http://exampleNamespace2")]
     class NamespacesExample
     {
-        
-        [XmlPath("/p:example/p:file/firstName")] 
+
+        [XmlPath("/p:example/p:file/firstName")]
         public string FirstName { get; set; }
 
         [XmlPath("/p:example/p:file/lastName")]

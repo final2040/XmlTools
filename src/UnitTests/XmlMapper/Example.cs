@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using XmlTools.XmlMapper;
 
 namespace UnitTests.XmlMapper
 {
-   
+
 
     class Example
     {
@@ -59,7 +55,7 @@ namespace UnitTests.XmlMapper
 
         [XmlPath("/example/schoolNumber")]
         public int SchoolNumber { get; set; }
-        
+
         [XmlPath("/example/schoolState")]
         public string SchoolState { get; set; }
 

@@ -1,19 +1,18 @@
-using System;
-using System.Net.Sockets;
-using System.Xml;
 using NUnit.Framework;
+using System;
+using System.Xml;
 using XmlTools.XmlMapper;
 
 namespace UnitTests.XmlMapper
 {
     public class XmlMapperTests
     {
-        
+
 
         [SetUp]
         public void Setup()
         {
-            
+
         }
 
         [Test]
@@ -21,7 +20,7 @@ namespace UnitTests.XmlMapper
         {
             // arrange
             var mapper = new Mapper();
-          
+
 
             // act
             var result = mapper.Map<Example>(XmlSample.ValidXml);
@@ -173,7 +172,7 @@ namespace UnitTests.XmlMapper
             var actual = mapper.Map<Example>(XmlSample.ValidXml);
 
             // assert
-            Assert.That(actual.InscriptionDate, Is.EqualTo(new DateTime(2021,05,20)));
+            Assert.That(actual.InscriptionDate, Is.EqualTo(new DateTime(2021, 05, 20)));
         }
 
         [Test]
