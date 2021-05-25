@@ -4,6 +4,7 @@
   <schoolNumber>32</schoolNumber>
   <schoolState>Alabama</schoolState>
   <inscriptionDate>2021-05-20</inscriptionDate>
+  <someProperty>asdfd</someProperty>
   <alumn>
     <firstName>Juan</firstName>
     <lastName>Perez</lastName>

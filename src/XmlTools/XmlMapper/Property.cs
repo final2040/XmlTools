@@ -106,6 +106,11 @@ namespace XmlTools.XmlMapper
                 throw new XmlMappingRequiredException(_parentNode + _xmlPath.Xpath);
             }
 
+            if (node == null && !_xmlPath.Required)
+            {
+                return string.Empty;
+            }
+
             return node.InnerText;
         }
 

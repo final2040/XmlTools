@@ -32,6 +32,23 @@ namespace UnitTests.XmlMapper
         }
 
         [Test]
+        public void Map_whenClassIneritsMappedClass_ShouldMapNodesToProperties()
+        {
+            // arrange
+            var mapper = new Mapper();
+
+
+            // act
+            var result = mapper.Map<InheritedExample>(XmlSample.ValidXml);
+
+            // assert
+            Assert.That(result.SchoolName, Is.EqualTo("Abraham Lincoln"));
+            Assert.That(result.SchoolState, Is.EqualTo("Alabama"));
+            Assert.That(result.SchoolNumber, Is.EqualTo(32));
+            Assert.That(result.SomeProperty, Is.EqualTo("asdfd"));
+        }
+
+        [Test]
         public void Map_ShouldMapNodesWithNamespaceToProperties()
         {
             // arrange
@@ -189,6 +206,23 @@ namespace UnitTests.XmlMapper
             Assert.That(GetNodeValue(actual, "/example/school"), Is.EqualTo(sample.SchoolName));
             Assert.That(GetNodeValue(actual, "/example/schoolNumber"), Is.EqualTo(sample.SchoolNumber.ToString()));
             Assert.That(GetNodeValue(actual, "/example/schoolState"), Is.EqualTo(sample.SchoolState));
+        }
+
+        [Test]
+        public void MapToXml_WhenClassIneritsMappedClass_ShouldWriteMapValuesToXml()
+        {
+            // arrange
+            var mapper = new Mapper();
+            var sample = InheritedExample.CreateSample();
+
+            // act
+            var actual = mapper.Map(sample, XmlSample.ValidXml);
+
+            // assert
+            Assert.That(GetNodeValue(actual, "/example/school"), Is.EqualTo(sample.SchoolName));
+            Assert.That(GetNodeValue(actual, "/example/schoolNumber"), Is.EqualTo(sample.SchoolNumber.ToString()));
+            Assert.That(GetNodeValue(actual, "/example/schoolState"), Is.EqualTo(sample.SchoolState));
+            Assert.That(GetNodeValue(actual, "/example/someProperty"), Is.EqualTo(sample.SomeProperty));
         }
 
         [Test]

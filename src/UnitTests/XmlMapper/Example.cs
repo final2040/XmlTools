@@ -3,7 +3,55 @@ using XmlTools.XmlMapper;
 
 namespace UnitTests.XmlMapper
 {
+    class InheritedExample : Example
+    {
+        [XmlPath("/example/someProperty", Required = true)]
+        public string SomeProperty { get; set; }
 
+        public static InheritedExample CreateSample()
+        {
+            return new InheritedExample()
+            {
+                SchoolName = "George Washington",
+                SchoolNumber = 343,
+                SchoolState = "Washington",
+                InscriptionDate = new DateTime(2021, 05, 03),
+                SomeProperty = "test",
+                Alumn = new Person()
+                {
+                    FirstName = "Erick",
+                    LastName = "Doe",
+                    Age = 17,
+                    Address = new Address()
+                    {
+                        Street = "3rd Street",
+                        Number = "78A",
+                        Phone = new Phone()
+                        {
+                            Code = "58",
+                            Number = "555-687858"
+                        }
+                    }
+                },
+                Parent = new Person()
+                {
+                    FirstName = "Susana",
+                    LastName = "Doe",
+                    Age = 17,
+                    Address = new Address()
+                    {
+                        Street = "1st Street",
+                        Number = "95B",
+                        Phone = new Phone()
+                        {
+                            Code = "25",
+                            Number = "555-5354585"
+                        }
+                    }
+                }
+            };
+        }
+    }
 
     class Example
     {
@@ -53,7 +101,7 @@ namespace UnitTests.XmlMapper
         [XmlPath("/example/school", Required = true)]
         public string SchoolName { get; set; }
 
-        [XmlPath("/example/schoolNumber")]
+        [XmlPath("/example/schoolNumber", Required = true)]
         public int SchoolNumber { get; set; }
 
         [XmlPath("/example/schoolState")]
