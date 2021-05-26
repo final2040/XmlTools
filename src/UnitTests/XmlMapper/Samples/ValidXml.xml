@@ -5,6 +5,7 @@
   <schoolState>Alabama</schoolState>
   <inscriptionDate>2021-05-20</inscriptionDate>
   <someProperty>asdfd</someProperty>
+  <emptyPrimitiveNode></emptyPrimitiveNode>
   <alumn>
     <firstName>Juan</firstName>
     <lastName>Perez</lastName>

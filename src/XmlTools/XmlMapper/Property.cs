@@ -75,7 +75,17 @@ namespace XmlTools.XmlMapper
             {
                 if (_xmlPath != null)
                 {
-                    SetValue(Convert.ChangeType(ReadXml(xml), GetPropertyType()));
+                    var nodeContent = ReadXml(xml);
+                    var propertyType = GetPropertyType();
+                    if (string.IsNullOrWhiteSpace(nodeContent) && propertyType.IsValueType)
+                    {
+                        SetValue(Activator.CreateInstance(propertyType));
+                    }
+                    else
+                    {
+                        SetValue(Convert.ChangeType(nodeContent, propertyType));
+                    }
+                    
                 }
             }
             catch (FormatException e)

@@ -82,6 +82,20 @@ namespace UnitTests.XmlMapper
         }
 
         [Test]
+        public void Map_WhenNodeIsEmptyAndPropertyIsPrimitive_ShouldAssignDefaultValueToProperty()
+        {
+            // arrange
+            var mapper = new Mapper();
+
+
+            // act
+            var result = mapper.Map<Example>(XmlSample.ValidXml);
+
+            // assert
+            Assert.That(result.PrimitiveNode, Is.EqualTo(default(int)));
+        }
+
+        [Test]
         public void Map_WhenDoesntMatchPropertyType_ShouldThrowInvalidTypeException()
         {
             // arrange

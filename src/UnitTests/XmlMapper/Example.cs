@@ -107,6 +107,9 @@ namespace UnitTests.XmlMapper
         [XmlPath("/example/schoolState")]
         public string SchoolState { get; set; }
 
+        [XmlPath("/example/emptyPrimitiveNode")]
+        public int PrimitiveNode { get; set; }
+
         [XmlPath("/example/inscriptionDate")]
         public DateTime InscriptionDate { get; set; }
 
